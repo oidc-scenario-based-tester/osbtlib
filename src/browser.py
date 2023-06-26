@@ -1,16 +1,19 @@
 import sys
+import re
 from playwright.sync_api import sync_playwright
 
 class BrowserSimulator:
-    def __init__(self, url: str):
+    def __init__(self, url: str, proxy_url: str):
         self.url = url
+        self.proxy_url = proxy_url
         self.browser = None
         self.page = None
 
     def run(self, script: str):
         playwright = sync_playwright().start()
-        browser = playwright.chromium.launch()
+        browser = playwright.chromium.launch(proxy={"server": self.proxy_url})
         page = browser.new_page()
+        page.goto(self.url)
 
         # Execute login flow
         try:

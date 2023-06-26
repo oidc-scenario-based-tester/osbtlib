@@ -63,3 +63,11 @@ class BurpClient:
         json_data = json.dumps(data)
         bytes_data = json_data.encode('utf-8')
         self.__send_data(bytes_data)
+    
+    def clean(self):
+        data = {
+            "operation": "clean"
+        }
+        json_data = json.dumps(data)
+        bytes_data = json_data.encode('utf-8')
+        self.__send_data(bytes_data)

@@ -5,7 +5,7 @@ import base64
 import sys
 import os
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '../src/utils'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '../src'))
 
 import id_token
 
@@ -64,7 +64,7 @@ class TestUtils(unittest.TestCase):
         original_token = jwt.encode({'foo': 'bar'}, secret, algorithm='HS256')
 
         signature = id_token.get_signature(original_token)
-        self.assertEqual(signature, original_token.decode('utf8').split('.')[2])
+        self.assertEqual(signature, original_token.split('.')[2])
 
     def test_replace_signature(self):
         # create id_token
