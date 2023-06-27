@@ -1,7 +1,7 @@
 import json
 import socket
 
-class BurpClient:
+class ProxyClient:
     def __init__(self, host: str, port: int):
         self.host = host
         self.port = port
@@ -59,6 +59,14 @@ class BurpClient:
         data = {
             "operation": "intercept",
             "condition": condition
+        }
+        json_data = json.dumps(data)
+        bytes_data = json_data.encode('utf-8')
+        self.__send_data(bytes_data)
+    
+    def clean(self):
+        data = {
+            "operation": "clean"
         }
         json_data = json.dumps(data)
         bytes_data = json_data.encode('utf-8')
