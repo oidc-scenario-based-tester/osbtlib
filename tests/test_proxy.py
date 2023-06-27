@@ -15,11 +15,11 @@ class TestProxyClient(unittest.TestCase):
     
     @pytest.mark.proxy
     def test_add_header(self):
-        self.client.add_header("HOGE", "hoge")
+        self.client.add_header("hoge", "hoge")
 
     @pytest.mark.proxy
     def test_modify_header(self):
-        self.client.modify_header("HOGE", "huga")
+        self.client.modify_header("hoge", "huga")
 
     @pytest.mark.proxy
     def test_add_body_param(self):
