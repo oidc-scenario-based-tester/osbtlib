@@ -1,8 +1,8 @@
-from src import burp
+from src import proxy
 from src import browser
 
 if __name__ == "__main__":
-    # client = burp.BurpClient("localhost", 5555)
+    # client = proxy.ProxyClient("localhost", 5555)
     # client.add_header("HOGE-HUGA", "hogehoge")
     # client.modify_header("HOGE-HUGA", "hugahuga")
     # client.add_body_param("hoge", "piyo")

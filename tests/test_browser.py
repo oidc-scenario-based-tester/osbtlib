@@ -9,18 +9,16 @@ from browser import BrowserSimulator
 
 class TestBrowserSimulator(unittest.TestCase):
 
-    @pytest.mark.burp
+    @pytest.mark.proxy
     def setUp(self):
         self.simulator = BrowserSimulator('https://example.com', 'http://localhost:8080')
-        self.simulator.run("""
-print(page.url)
-        """)
+        self.simulator.run("print(page.url)")
     
-    @pytest.mark.burp
+    @pytest.mark.proxy
     def tearDown(self):
         self.simulator.close()
     
-    @pytest.mark.burp
+    @pytest.mark.proxy
     def test_search_on_page(self):
         # Ensure a known text is found
         self.assertTrue(self.simulator.search_on_page('Example Domain'))

@@ -5,8 +5,8 @@
 // Run all tests
 $ python -m pytest
 
-// Run only test that do not use the server and burp
-$ python -m pytest -m "not server and not burp"
+// Run only test that do not use the server and proxy
+$ python -m pytest -m "not server and not proxy"
 
 // Run only tests that do not use the server
 $ python -m pytest -m "not server"

@@ -12,7 +12,8 @@ class BrowserSimulator:
     def run(self, script: str):
         playwright = sync_playwright().start()
         browser = playwright.chromium.launch(proxy={"server": self.proxy_url})
-        page = browser.new_page()
+        context = browser.new_context(ignore_https_errors=True)
+        page = context.new_page()
         page.goto(self.url)
 
         # Execute login flow

@@ -5,7 +5,6 @@ import time
 sys.path.append(os.path.join(os.path.dirname(__file__), '../../src'))
 
 from browser import BrowserSimulator
-from burp import BurpClient
 from attacker_idp import AttackerIdPClient
 import id_token
 
