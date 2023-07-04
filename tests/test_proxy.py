@@ -22,6 +22,14 @@ class TestProxyClient(unittest.TestCase):
         self.client.modify_header("hoge", "huga")
 
     @pytest.mark.proxy
+    def test_add_query_param(self):
+        self.client.add_query_param("hoge", "hoge")
+
+    @pytest.mark.proxy
+    def test_modify_query_param(self):
+        self.client.modify_query_param("hoge", "huga")
+
+    @pytest.mark.proxy
     def test_add_body_param(self):
         self.client.add_body_param("hoge", "huga")
 
@@ -32,6 +40,10 @@ class TestProxyClient(unittest.TestCase):
     @pytest.mark.proxy
     def test_intercept(self):
         self.client.intercept("aaaaa")
+    
+    # @pytest.mark.proxy
+    # def test_clean(self):
+    #     self.client.clean()
 
 if __name__ == '__main__':
     unittest.main()

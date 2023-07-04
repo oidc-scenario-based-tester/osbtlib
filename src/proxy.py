@@ -35,6 +35,26 @@ class ProxyClient:
         bytes_data = json_data.encode('utf-8')
         self.__send_data(bytes_data)
 
+    def add_query_param(self, name: str, value: str):
+        data = {
+            "operation": "add_query_param",
+            "name": name,
+            "value": value
+        }
+        json_data = json.dumps(data)
+        bytes_data = json_data.encode('utf-8')
+        self.__send_data(bytes_data)
+
+    def modify_query_param(self, name: str, value: str):
+        data = {
+            "operation": "modify_query_param",
+            "name": name,
+            "value": value
+        }
+        json_data = json.dumps(data)
+        bytes_data = json_data.encode('utf-8')
+        self.__send_data(bytes_data)
+
     def add_body_param(self, name: str, value: str):
         data = {
             "operation": "add_body_param",
