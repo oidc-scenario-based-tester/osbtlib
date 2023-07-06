@@ -11,39 +11,53 @@ class TestProxyClient(unittest.TestCase):
 
     @pytest.mark.proxy
     def setUp(self):
-        self.client = ProxyClient("localhost", 5555)
+        self.client = ProxyClient("http://localhost:5555")
     
     @pytest.mark.proxy
     def test_add_header(self):
-        self.client.add_header("hoge", "hoge")
+        res = self.client.add_header("hoge", "hoge")
+        self.assertEqual("ok", res["status"])
+        
 
     @pytest.mark.proxy
     def test_modify_header(self):
-        self.client.modify_header("hoge", "huga")
+        res = self.client.modify_header("hoge", "huga")
+        self.assertEqual("ok", res["status"])
 
     @pytest.mark.proxy
     def test_add_query_param(self):
-        self.client.add_query_param("hoge", "hoge")
+        res = self.client.add_query_param("hoge", "hoge")
+        self.assertEqual("ok", res["status"])
 
     @pytest.mark.proxy
     def test_modify_query_param(self):
-        self.client.modify_query_param("hoge", "huga")
+        res = self.client.modify_query_param("hoge", "huga")
+        self.assertEqual("ok", res["status"])
 
     @pytest.mark.proxy
     def test_add_body_param(self):
-        self.client.add_body_param("hoge", "huga")
+        res = self.client.add_body_param("hoge", "huga")
+        self.assertEqual("ok", res["status"])
 
     @pytest.mark.proxy
     def test_modify_body_param(self):
-        self.client.modify_body_param("hoge", "piyo")
+        res = self.client.modify_body_param("hoge", "piyo")
+        self.assertEqual("ok", res["status"])
 
     @pytest.mark.proxy
     def test_intercept(self):
-        self.client.intercept("aaaaa")
+        res = self.client.intercept("aaaaa")
+        self.assertEqual("ok", res["status"])
     
-    # @pytest.mark.proxy
-    # def test_clean(self):
-    #     self.client.clean()
+    @pytest.mark.proxy
+    def test_get_history(self):
+        res = self.client.get_history()
+        self.assertEqual("ok", res["status"])
+        
+    @pytest.mark.proxy
+    def test_clean(self):
+        res = self.client.clean()
+        self.assertEqual("ok", res["status"])
 
 if __name__ == '__main__':
     unittest.main()
