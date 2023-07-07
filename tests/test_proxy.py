@@ -45,8 +45,13 @@ class TestProxyClient(unittest.TestCase):
         self.assertEqual("ok", res["status"])
 
     @pytest.mark.proxy
-    def test_intercept(self):
-        res = self.client.intercept("aaaaa")
+    def test_intercept_request(self):
+        res = self.client.intercept_request("aaaaa")
+        self.assertEqual("ok", res["status"])
+    
+    @pytest.mark.proxy
+    def test_intercept_response(self):
+        res = self.client.intercept_response("aaaaa")
         self.assertEqual("ok", res["status"])
     
     @pytest.mark.proxy

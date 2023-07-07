@@ -62,9 +62,16 @@ class ProxyClient:
         }
         return self.send_data(data)
 
-    def intercept(self, condition: str):
+    def intercept_request(self, condition: str):
         data = {
-            "operation": "intercept",
+            "operation": "intercept_request",
+            "condition": condition
+        }
+        return self.send_data(data)
+    
+    def intercept_response(self, condition: str):
+        data = {
+            "operation": "intercept_response",
             "condition": condition
         }
         return self.send_data(data)
@@ -74,7 +81,6 @@ class ProxyClient:
             "operation": "get_history"
         }
         return self.send_data(data)
-
 
     def clean(self):
         data = {
