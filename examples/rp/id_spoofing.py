@@ -6,14 +6,24 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '../../src'))
 
 from browser import BrowserSimulator
 from attacker_idp import AttackerIdPClient
+from cli import CLIClient
 import id_token
+
+# Test Information
+test_name = "IDSpoofing"
+test_description = "- The attacker op modifies the id_token to impersonate the victim <br> - The sub claim of the id_token is modified to the victim's sub claim"
+outcome = "Failed"
+err_msg = ""
+countermeasure = "- Check the signature of the id_token <br> - Check the iss claim of the id_token <br> - Check the sub claim of the id_token"
+
 
 ATTACKER_IDP_ENDPOINT = "http://localhost:9997"
 HONEST_RP_ENDPOINT = "http://localhost:9999"
 PROXY_SERVER_ENDPOINT = "http://localhost:8080"
 
 attakcer_idp_client = AttackerIdPClient(ATTACKER_IDP_ENDPOINT)
-simulator = BrowserSimulator(f'{HONEST_RP_ENDPOINT}/login', PROXY_SERVER_ENDPOINT)
+simulator = BrowserSimulator(f'{HONEST_RP_ENDPOINT}/login?issuer={ATTACKER_IDP_ENDPOINT}/', PROXY_SERVER_ENDPOINT)
+cli_client = CLIClient()
 
 try:
     # create malicious id_token
@@ -43,9 +53,20 @@ print(page.content())
     """
     
     simulator.run(sso_flow)
+    content = simulator.get_content()
+    print("content:", content)
     simulator.close()
 
+    if "issuer does not match" in content:
+        outcome = "Passed"
+
     attakcer_idp_client.delete_task()
+
+    cli_client.send_result(test_name, test_description, outcome, err_msg, countermeasure)
 except Exception as e:
     print('Error:', e)
     attakcer_idp_client.delete_task()
+
+    outcome = "Failed"
+    err_msg = str(e)
+    cli_client.send_result(test_name, test_description, outcome, err_msg, countermeasure)
