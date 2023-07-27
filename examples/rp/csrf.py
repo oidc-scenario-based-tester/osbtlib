@@ -8,7 +8,6 @@ from browser import BrowserSimulator
 from proxy import ProxyClient
 import id_token
 
-ATTACKER_IDP_ENDPOINT = "http://localhost:9997"
 HONEST_RP_ENDPOINT = "http://localhost:9999"
 PROXY_SERVER_ENDPOINT = "http://localhost:8080"
 PROXY_EXTENSION_ENDPOINT = "http://localhost:5555"

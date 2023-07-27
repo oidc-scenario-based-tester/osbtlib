@@ -5,12 +5,12 @@ import os
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '../osbtlib'))
 
-from attacker_idp import AttackerIdPClient
+from attacker_op import AttackerOPClient
 
-class TestAttackerIdPClient(unittest.TestCase):
+class TestAttackerOPClient(unittest.TestCase):
 
     def setUp(self):
-        self.client = AttackerIdPClient("http://localhost:9997")
+        self.client = AttackerOPClient("http://localhost:9997")
 
     @pytest.mark.server
     def test_add_task(self):

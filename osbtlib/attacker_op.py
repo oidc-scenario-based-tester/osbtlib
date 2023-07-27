@@ -1,6 +1,6 @@
 import requests
 
-class AttackerIdPClient:
+class AttackerOPClient:
     def __init__(self, url: str):
         self.url = url
 
