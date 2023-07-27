@@ -3,14 +3,14 @@ import pytest
 import sys
 import os
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '../src'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '../osbtlib'))
 
 from attacker_idp import AttackerIdPClient
 
 class TestAttackerIdPClient(unittest.TestCase):
 
     def setUp(self):
-        self.client = AttackerIdPClient("http://localhost:3000")
+        self.client = AttackerIdPClient("http://localhost:9997")
 
     @pytest.mark.server
     def test_add_task(self):
@@ -22,5 +22,5 @@ class TestAttackerIdPClient(unittest.TestCase):
         task = self.client.get_task(task_id)
         print(task)
 
-        self.assertEqual(name, task.get('name'))
-        self.assertDictEqual(args, task.get('args'))
+        self.assertEqual(name, task.get('Name'))
+        self.assertDictEqual(args, task.get('Args'))
