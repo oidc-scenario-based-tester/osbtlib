@@ -89,17 +89,124 @@ $ osbt run -f scenario.py -t 30
 ### Import
 
 ```py
-import osbtlib
+import Osbtlib, BrowserSimulator from osbtlib
 ```
 
-### Proxy Server Operation
+`Osbtlib` includes a client that interacts with proxy extensions, a client that interacts with the Attacker OP, and the ability to manipulate ID Token.
 
-### Attacker OP Operation
+`BrowserSimulator` includes the ability to automate browser operations using [PlayWright](https://playwright.dev/).
 
-### Browser Simulator Operation
+```py
+osbt = Osbtlib(
+    proxy_extension_url = "http://localhost:5555",
+    attacker_op_url = "http://localhost:9997",
+    cli_server_url = "http://localhost:54454"
+)
+
+bs = BrowserSimulator(
+    url = "http://localhost:9999/login",
+    proxy_url = "http://localhost:8080"
+)
+```
+
+Create an instance of `Osbtlib`. The arguments are as follows:
+- `proxy_extension_url` : URL of proxy extension server
+- `attacker_op_url`: URL of attacker op
+- `cli_server_url`: URL of osbt server
+
+Create an instance of `BrowserSimulator`. The arguments are as follows:
+- `url`: URL of login page
+- `proxy_url`: URL of proxy server
+
+### Proxy Server Operation `Osbtlib.proxy`
+#### add, modify request header
+```py
+osbt.proxy.add_header("header_name", "header_value")
+osbt.proxy.modify_header("modified_header_name", "header_value")
+```
+
+> `add_header(name: str, value: str) -> dict`
+- `name`: Name of the header to be added
+- `value`: Value of the header to be added
+
+> `modify_header(name: str, value: str) -> dict`
+- `name`: Name of the header to be replaced
+- `value`: Value of the header to be replaced
+
+#### add, modify request query param
+```py
+osbt.proxy.add_query_param("param_name", "param_value")
+osbt.proxy.modify_query_param("modified_param_name", "param_value")
+```
+> `add_query_param(name: str, value: str) -> dict`
+- `name`: Name of the query param to be added
+- `value`: Value of the query param to be added
+
+> `modify_query_param(name: str, value: str) -> dict`
+- `name`: Name of the query param to be replaced
+- `value`: Value of the query param to be replaced
+
+#### add, modify request body param
+```py
+osbt.proxy.add_body_param("param_name", "param_value")
+osbt.proxy.modify_body_param("modified_param_name", "param_value")
+```
+> `add_body_param(name: str, value: str) -> dict`
+- `name`: Name of the body param to be added
+- `value`: Value of the body param to be added
+
+> `modify_body_param(name: str, value: str) -> dict`
+- `name`: Name of the body param to be replaced
+- `value`: Value of the body param to be replaced
+
+#### intercept request/response
+```py
+osbt.proxy.intercept_request("condition")
+osbt.proxy.intercept_response("condition")
+```
+> `intercept_request(condition: str) -> dict`
+- `condition`: Requests containing this string are dropped
+
+> `intercept_response(condition: str) -> dict`
+- `condition`: Responses containing this string are dropped
+
+#### get request/response history
+```py
+osbt.proxy.get_history()
+```
+> `get_history() -> dict`
+
+#### delete all rules and history
+```py
+osbt.proxy.clean()
+```
+> `clean() -> dict`
+
+### Attacker OP Operation `Osbtlib.attacker-op`
+#### ID Token Replacement for Responses
+
+#### Providing malicious endpoints using the Discovery service
+
+#### Redirect to Honest OP upon an authentication request
+
+### Browser Simulator Operation `BrowserSimulator`
+
+### CLI Operation `Osbtlib.cli`
+
+#### send test result to osbt server
+```py
+osbt.cli.send_result(
+    "IDSpoofing",
+    "- The attacker op modifies the id_token to impersonate the victim <br> - The sub claim of the id_token is modified to the victim's sub claim",
+    "Passed",
+    "",
+    "- Check the signature of the id_token <br> - Check the iss claim of the id_token <br> - Check the sub claim of the id_token"
+)
+```
+> `send_result(test_name: str, description: str, outcome: str, err_msg: str, countermeasure: str) -> dict`
 
 ### Others
-#### ID Token Operation
+#### ID Token Operation `Osbtlib.id_token`
 
 ## Test
 ```
