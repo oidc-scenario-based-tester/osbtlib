@@ -184,10 +184,31 @@ osbt.proxy.clean()
 
 ### Attacker OP Operation `Osbtlib.attacker-op`
 #### ID Token Replacement for Responses
+```py
+osbt.attacker_op.replace_id_token("[id_token]")
+```
+> `replace_id_token(id_token: str) -> bool`
+- `id_token`: The value after replacement of the ID token in the response from the Attacker OP.
 
 #### Providing malicious endpoints using the Discovery service
+```py
+osbt.attacker_op.set_malicious_endpoints({
+    "authorization_endpoint": "http://localhost:9999/auth"
+})
+```
+> `set_malicious_endpoints(endpoints: dict) -> bool`
+- `endpoints`: Change the endpoints that Attacker OP returns when `/.well-known/openid-configuration` is accessed. The following endpoints can be changed.
+  - `authorization_endpoint`
+  - `token_endpoint`
+  - `userinfo_endpoint`
+  - `registration_endpoint`
 
 #### Redirect to Honest OP upon an authentication request
+```py
+osbt.attacker_op.idp_confusion("http://localhost:9998/auth")
+```
+> `idp_confusion(honest_op_auth_endpoint: str) -> bool`
+- `honest_op_auth_endpoint`: `authorization_endpoint` of the honest OP. When an authentication request is sent to the Attacker OP, it is redirected to this endpoint with the query parameters passed on.
 
 ### Browser Simulator Operation `BrowserSimulator`
 
@@ -207,6 +228,38 @@ osbt.cli.send_result(
 
 ### Others
 #### ID Token Operation `Osbtlib.id_token`
+##### get, replace header
+```py
+osbt.id_token.get_header("[id_token]") # {'alg': 'HS256', 'typ': 'JWT'}
+osbt.id_token.replace_header("[id_token]", {'alg': 'HS256', 'typ': 'JWS'}) 
+```
+> `get_header(id_token: str) -> dict`
+- `id_token`: ID token for which the header will be obtained.
+> `replace_header(id_token: str, new_header: dict) -> str`
+- `id_token`: ID token for which the header will be replaced.
+- `new_header`: Header of ID token after replacement.
+
+##### get, replace payload
+```py
+osbt.id_token.get_payload("[id_token]") # {'sub': '1234', 'username': 'guest'}
+osbt.id_token.replace_payload("[id_token]", {'sub': '1234', 'username': 'guest'}) 
+```
+> `get_payload(id_token: str) -> dict`
+- `id_token`: ID token for which the payload will be obtained.
+> `replace_payload(id_token: str, new_payload: dict) -> str`
+- `id_token`: ID token for which the payload will be replaced.
+- `new_payload`: Payload of ID token after replacement.
+  
+##### get, replace signature
+```py
+osbt.id_token.get_signature("[id_token]") # SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+osbt.id_token.replace_header("[id_token]", "SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c") 
+```
+> `get_signature(id_token: str) -> str`
+- `id_token`: ID token for which the signature will be obtained.
+> `replace_header(id_token: str, new_signature: str) -> str`
+- `id_token`: ID token for which the signature will be replaced.
+- `new_signature`: Header of ID token after replacement.
 
 ## Test
 ```
