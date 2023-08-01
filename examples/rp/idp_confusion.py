@@ -2,27 +2,31 @@ import sys
 import os
 import time
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '../../src'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '../../osbtlib'))
 
-from browser import BrowserSimulator
-from attacker_op import AttackerOPClient
-import id_token
+from osbtlib import BrowserSimulator, Osbtlib
+
+# Test Information
+test_name = "IdPConfusion"
+test_description = "IdPConfusion description"
+outcome = "Failed"
+err_msg = ""
+countermeasure = "IdPConfusion countermeasure"
 
 ATTACKER_OP_ENDPOINT = "http://localhost:9997"
 HONEST_OP_ENDPOINT = "http://localhost:9998"
 HONEST_RP_ENDPOINT = "http://localhost:9999"
 PROXY_SERVER_ENDPOINT = "http://localhost:8080"
 
-attakcer_op_client = AttackerOPClient(ATTACKER_OP_ENDPOINT)
+osbt = Osbtlib(
+    attacker_op_url = ATTACKER_OP_ENDPOINT
+)
 
 try:
-    # add task to attacker op
-    name = 'OPConfusion'
-    args = {
-        'honest_op_auth_endpoint': f'{HONEST_OP_ENDPOINT}/auth'
-    }
-    task_id = attakcer_op_client.add_task(name, args)
-    print(task_id)
+    # send order to attacker op
+    res = osbt.attacker_op.idp_confusion(f'{HONEST_OP_ENDPOINT}/auth')
+    print("request sent:", res)
+
 
     time.sleep(5)
 
@@ -39,11 +43,23 @@ print(page.content())
     """
     
     # fishing login
-    simulator = BrowserSimulator(f'{HONEST_RP_ENDPOINT}/login?issuer={ATTACKER_OP_ENDPOINT}/', PROXY_SERVER_ENDPOINT)
-    simulator.run(sso_flow)
-    simulator.close()
+    bs = BrowserSimulator(f'{HONEST_RP_ENDPOINT}/login?issuer={ATTACKER_OP_ENDPOINT}/', PROXY_SERVER_ENDPOINT)
+    bs.run(sso_flow)
+    content = bs.get_content()
+    print("content:", content)
+    bs.close()
 
-    attakcer_op_client.delete_task()
+    # result check
+    if "failed to exchange token" in content:
+        outcome = "Passed"
+
+    osbt.attacker_op.clean()
+
+    osbt.cli.send_result(test_name, test_description, outcome, err_msg, countermeasure)
 except Exception as e:
     print('Error:', e)
-    attakcer_op_client.delete_task()
+    osbt.attacker_op.clean()
+
+    outcome = "Failed"
+    err_msg = str(e)
+    osbt.cli.send_result(test_name, test_description, outcome, err_msg, countermeasure)

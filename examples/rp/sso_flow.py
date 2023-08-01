@@ -1,9 +1,9 @@
 import sys
 import os
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '../../src'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '../../osbtlib'))
 
-from browser import BrowserSimulator
+from osbtlib import BrowserSimulator
 
 # victim credentials
 victim_username = 'test-user@localhost'
@@ -17,6 +17,6 @@ page.locator('button[type="submit"]').click()
 print(page.content())
 """
 
-simulator = BrowserSimulator('http://localhost:9999/login', 'http://localhost:8080')
-simulator.run(sso_flow)
-simulator.close()
+bs = BrowserSimulator('http://localhost:9999/login', 'http://localhost:8080')
+bs.run(sso_flow)
+bs.close()

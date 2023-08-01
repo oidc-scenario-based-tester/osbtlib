@@ -1,8 +1,8 @@
-from .proxy import ProxyClient
-from .attacker_op import AttackerOPClient
-from .brower import BrowserSimulator
-from .cli import CLIClient
-from . import id_token
+from proxy import ProxyClient
+from attacker_op import AttackerOPClient
+from browser import BrowserSimulator
+from cli import CLIClient
+import id_token
 
 class Osbtlib:
     def __init__(

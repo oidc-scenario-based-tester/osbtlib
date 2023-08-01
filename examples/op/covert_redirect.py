@@ -2,13 +2,19 @@ import sys
 import os
 import time
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '../../src'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '../../osbtlib'))
 
-from browser import BrowserSimulator
-from proxy import ProxyClient
-import id_token
+from osbtlib import BrowserSimulator, Osbtlib
+
+# Test Information
+test_name = "CovertRedirect"
+test_description = "covert redirect description"
+outcome = "Failed"
+err_msg = ""
+countermeasure = "covert redirect countermeasure"
 
 HONEST_RP_ENDPOINT = "http://localhost:9999"
+HONEST_OP_ENDPOINT = "http://localhost:9998"
 PROXY_SERVER_ENDPOINT = "http://localhost:8080"
 PROXY_EXTENSION_ENDPOINT = "http://localhost:5555"
 
@@ -16,27 +22,33 @@ PROXY_EXTENSION_ENDPOINT = "http://localhost:5555"
 victim_username = 'test-user@localhost'
 victim_password = 'verysecure'
 
-proxy_client = ProxyClient(PROXY_EXTENSION_ENDPOINT)
+osbt = Osbtlib(
+    proxy_extension_url = PROXY_EXTENSION_ENDPOINT
+)
 
-simulator = BrowserSimulator(f'{HONEST_RP_ENDPOINT}/login', PROXY_SERVER_ENDPOINT)
+bs = BrowserSimulator(f'{HONEST_RP_ENDPOINT}/login?issuer={HONEST_OP_ENDPOINT}/', PROXY_SERVER_ENDPOINT)
 
 try:
     # replace redirect_uri
     redirect_uri = 'https://eo2zoljihgn2f5z.m.pipedream.net'
-    proxy_client.modify_query_param('redirect_uri', redirect_uri)    
-
-    # browser simulation
-    sso_flow = f"""
-page.locator('input[name="username"]').fill('{victim_username}')
-page.locator('input[name="password"]').fill('{victim_password}')
-page.locator('button[type="submit"]').click()
-print(page.content())
-    """
+    osbt.proxy.modify_query_param('redirect_uri', redirect_uri)    
     
-    simulator.run(sso_flow)
-    simulator.close()
+    bs.run("")
+    content = bs.get_content()
+    print("content:", content)
+    bs.close()
 
-    proxy_client.clean()
+    # result check
+    if "The requested redirect_uri is missing" in content:
+        outcome = "Passed"
+
+    osbt.proxy.clean()
+
+    osbt.cli.send_result(test_name, test_description, outcome, err_msg, countermeasure)
 except Exception as e:
     print('Error:', e)
-    proxy_client.clean()
+    osbt.proxy.clean()
+
+    outcome = "Failed"
+    err_msg = str(e)
+    osbt.cli.send_result(test_name, test_description, outcome, err_msg, countermeasure)
