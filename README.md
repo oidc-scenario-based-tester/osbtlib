@@ -21,29 +21,41 @@ $ touch scenario.py
 import sys
 import os
 import time
+import jwt
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '../../src'))
+from osbtlib import BrowserSimulator, Osbtlib
 
-from browser import BrowserSimulator
-from proxy import ProxyClient
-import id_token
+# Test Information
+test_name = "IDSpoofing"
+test_description = "- The attacker op modifies the id_token to impersonate the victim <br> - The sub claim of the id_token is modified to the victim's sub claim"
+outcome = "failed"
+err_msg = ""
+countermeasure = "- Check the signature of the id_token <br> - Check the iss claim of the id_token <br> - Check the sub claim of the id_token"
 
+
+ATTACKER_OP_ENDPOINT = "http://localhost:9997"
 HONEST_RP_ENDPOINT = "http://localhost:9999"
 PROXY_SERVER_ENDPOINT = "http://localhost:8080"
-PROXY_EXTENSION_ENDPOINT = "http://localhost:5555"
 
-# victim credentials
-victim_username = 'test-user@localhost'
-victim_password = 'verysecure'
+osbt = Osbtlib(
+    attacker_op_url = ATTACKER_OP_ENDPOINT
+)
 
-proxy_client = ProxyClient(PROXY_EXTENSION_ENDPOINT)
-
-simulator = BrowserSimulator(f'{HONEST_RP_ENDPOINT}/login', PROXY_SERVER_ENDPOINT)
+bs = BrowserSimulator(f'{HONEST_RP_ENDPOINT}/login?issuer={ATTACKER_OP_ENDPOINT}/', PROXY_SERVER_ENDPOINT)
 
 try:
-    # replace redirect_uri
-    redirect_uri = 'https://example.com'
-    proxy_client.modify_query_param('redirect_uri', redirect_uri)    
+    # create malicious id_token
+    malicious_id_token = jwt.encode({"issuer": "http://localhost:9997/", "sub": "hoge"}, key="", algorithm="none")
+
+    # send order to attacker op
+    res = osbt.attacker_op.replace_id_token(malicious_id_token)
+    print("request sent:", res)
+
+    time.sleep(5)
+
+    # victim credentials
+    victim_username = 'test-user@localhost'
+    victim_password = 'verysecure'
 
     # browser simulation
     sso_flow = f"""
@@ -53,30 +65,44 @@ page.locator('button[type="submit"]').click()
 print(page.content())
     """
     
-    simulator.run(sso_flow)
-    simulator.close()
+    bs.run(sso_flow)
+    content = bs.get_content()
+    print("content:", content)
+    bs.close()
 
-    proxy_client.clean()
+    # result check
+    if "issuer does not match" in content:
+        outcome = "pass"
+
+    osbt.attacker_op.clean()
+
+    osbt.cli.send_result(test_name, test_description, outcome, err_msg, countermeasure)
 except Exception as e:
     print('Error:', e)
-    proxy_client.clean()
+    osbt.attacker_op.clean()
+
+    outcome = "failed"
+    err_msg = str(e)
+    osbt.cli.send_result(test_name, test_description, outcome, err_msg, countermeasure)
 ```
 
-Run example RP and OP in [zitadel/oidc](https://github.com/zitadel/oidc).
+Run example RP and attacker OP.
 
 ```
 # start oidc op server
-$ go run github.com/zitadel/oidc/v2/example/server
+$ attacker-op
 
 # start oidc web client (in a new terminal)
-$ CLIENT_ID=web CLIENT_SECRET=secret ISSUER=http://localhost:9998/ SCOPES="openid profile" PORT=9999 go run github.com/zitadel/oidc/v2/example/client/app
+$ git clone https://github.com/oidc-scenario-based-tester/osbt.git
+$ cd osbt
+$ CLIENT_ID=web CLIENT_SECRET=secret ISSUER=http://localhost:9997/ SCOPES="openid profile" PORT=9999 go run github.com/oidc-scenario-based-tester/osbt/oidc/rp/user-selected
 ```
 
 Run osbt server and proxy server extension.
 
 ```
 $ osbt server
-$ mitmdump -s proxy.py
+$ mitmdump -s proxy-extension.py
 ```
 
 Then execute scenario script by `osbt run`.
