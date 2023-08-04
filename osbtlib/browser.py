@@ -1,7 +1,7 @@
 import sys
 import re
 from playwright.sync_api import sync_playwright
-from exceptions import ExecutionError, NoPageAvailableError, NoContentAvailableError
+from .exceptions import ExecutionError, NoPageAvailableError, NoContentAvailableError
 
 class BrowserSimulator:
     def __init__(self, url: str, proxy_url: str):

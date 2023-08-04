@@ -1,5 +1,5 @@
 import requests
-from exceptions import AddTaskError, GetTaskError, DeleteTaskError, ReplaceIdTokenError, SetMaliciousEndpointsError, IdPConfusionError, CleanError
+from .exceptions import AddTaskError, GetTaskError, DeleteTaskError, ReplaceIdTokenError, SetMaliciousEndpointsError, IdPConfusionError, CleanError
 
 class AttackerOPClient:
     def __init__(self, url: str):

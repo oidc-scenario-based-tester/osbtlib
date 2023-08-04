@@ -1,6 +1,6 @@
 import json
 import requests
-from exceptions import SendDataError
+from .exceptions import SendDataError
 
 class ProxyClient:
     def __init__(self, url: str):
