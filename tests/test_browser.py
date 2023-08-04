@@ -3,9 +3,7 @@ import pytest
 import sys
 import os
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '../osbtlib'))
-
-from browser import BrowserSimulator
+from osbtlib.browser import BrowserSimulator
 
 class TestBrowserSimulator(unittest.TestCase):
 

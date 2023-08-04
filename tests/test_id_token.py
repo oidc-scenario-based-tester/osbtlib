@@ -5,9 +5,7 @@ import base64
 import sys
 import os
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '../osbtlib'))
-
-import id_token
+import osbtlib.id_token as id_token
 
 class TestUtils(unittest.TestCase):
     def test_get_header(self):

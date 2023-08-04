@@ -3,9 +3,7 @@ import pytest
 import sys
 import os
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '../osbtlib'))
-
-from proxy import ProxyClient
+from osbtlib.proxy import ProxyClient
 
 class TestProxyClient(unittest.TestCase):
 
