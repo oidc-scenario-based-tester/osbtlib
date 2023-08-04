@@ -1,6 +1,7 @@
 import sys
 import re
 from playwright.sync_api import sync_playwright
+from exceptions import ExecutionError, NoPageAvailableError, NoContentAvailableError
 
 class BrowserSimulator:
     def __init__(self, url: str, proxy_url: str):
@@ -20,8 +21,7 @@ class BrowserSimulator:
         try:
             exec(script)
         except Exception as e:
-            print("Execution Error:", e)
-            sys.exit()
+            raise ExecutionError(f"Execution Error: {str(e)}")
 
         # save browser and page
         self.playwright = playwright
@@ -32,17 +32,18 @@ class BrowserSimulator:
         if self.page is not None:
             self.page.goto(url)
         else:
-            print("Error: No page available")
+            raise NoPageAvailableError("Error: No page available")
 
     def get_content(self) -> str:
         # Get the page's HTML content
-        page_content = self.page.content()
-        return page_content
+        if self.page is not None:
+            page_content = self.page.content()
+            return page_content
+        else:
+            raise NoContentAvailableError("Error: No content available")
 
     def close(self):
         print("Finished browser process.")
         self.page.close()
         self.browser.close()
         self.playwright.stop()
-
-

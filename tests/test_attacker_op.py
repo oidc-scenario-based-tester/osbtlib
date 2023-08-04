@@ -13,14 +13,24 @@ class TestAttackerOPClient(unittest.TestCase):
         self.client = AttackerOPClient("http://localhost:9997")
 
     @pytest.mark.server
-    def test_add_task(self):
-        name = 'IDSpoofing'
-        args = {
-            'id_token': 'foo'
-        }
-        task_id = self.client.add_task(name, args)
-        task = self.client.get_task(task_id)
-        print(task)
+    def test_replace_id_token(self):
+        new_id_token = 'foo'
+        result = self.client.replace_id_token(new_id_token)
+        self.assertTrue(result)
 
-        self.assertEqual(name, task.get('Name'))
-        self.assertDictEqual(args, task.get('Args'))
+    @pytest.mark.server
+    def test_set_malicious_endpoints(self):
+        endpoints = {'endpoint1': 'http://malicious.com', 'endpoint2': 'http://evil.com'}
+        result = self.client.set_malicious_endpoints(endpoints)
+        self.assertTrue(result)
+
+    @pytest.mark.server
+    def test_idp_confusion(self):
+        honest_op_auth_endpoint = 'http://honest.com/auth'
+        result = self.client.idp_confusion(honest_op_auth_endpoint)
+        self.assertTrue(result)
+    
+    @pytest.mark.server
+    def test_clean(self):
+        result = self.client.clean()
+        self.assertTrue(result)

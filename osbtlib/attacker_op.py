@@ -1,4 +1,5 @@
 import requests
+from exceptions import AddTaskError, GetTaskError, DeleteTaskError, ReplaceIdTokenError, SetMaliciousEndpointsError, IdPConfusionError, CleanError
 
 class AttackerOPClient:
     def __init__(self, url: str):
@@ -14,7 +15,7 @@ class AttackerOPClient:
             req = requests.post(self.url + '/task', json=payload)
             return req.json()['taskId']
         except Exception as e:
-            print("Add Task Error: ", e)
+            raise AddTaskError(f"Add Task Error: {str(e)}")
 
     # Get task
     def __get_task(self, task_id: str) -> dict:
@@ -22,7 +23,7 @@ class AttackerOPClient:
             req = requests.get(self.url + f'/task/{task_id}')
             return req.json()
         except Exception as e:
-            print("Get Task Error: ", e)
+            raise GetTaskError(f"Get Task Error: {str(e)}")
 
     # Delete task
     def __delete_task(self) -> dict:
@@ -30,7 +31,7 @@ class AttackerOPClient:
             req = requests.delete(self.url + '/task')
             return req.json()
         except Exception as e:
-            print("Delete Task Error: ", e)
+            raise DeleteTaskError(f"Delete Task Error: {str(e)}")
 
     # ID Token Replacement for Responses
     def replace_id_token(self, new_id_token: str) -> bool:
@@ -46,7 +47,7 @@ class AttackerOPClient:
             return True
 
         except Exception as e:
-            print("Replace ID Token Error: ", e) 
+            raise ReplaceIdTokenError(f"Replace ID Token Error: {str(e)}") 
     
     # Provide malicious endpoints using the Discovery service
     def set_malicious_endpoints(self, endpoints: dict) -> bool:
@@ -60,7 +61,7 @@ class AttackerOPClient:
             return True
 
         except Exception as e:
-            print("Set Malicious Endpoints Error: ", e)
+            raise SetMaliciousEndpointsError(f"Set Malicious Endpoints Error: {str(e)}")
 
     # Redirect to Honest OP upon an authentication request
     def idp_confusion(self, honest_op_auth_endpoint: str) -> bool:
@@ -76,7 +77,7 @@ class AttackerOPClient:
             return True
         
         except Exception as e:
-            print("IDP Confusion Error: ", e)
+            raise IdPConfusionError(f"IdP Confusion Error: {str(e)}")
 
     # clean
     def clean(self) -> bool:
@@ -86,4 +87,4 @@ class AttackerOPClient:
                 return False
             return True
         except Exception as e:
-            print("Clean Error: ", e)
+            raise CleanError(f"Clean Error: {str(e)}")

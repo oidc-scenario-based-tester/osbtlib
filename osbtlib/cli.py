@@ -12,9 +12,12 @@ class CLIClient:
             "err_msg": err_msg,
             "countermeasure": countermeasure
         }
-        response = requests.post(f"{self.server_url}/result/add", json=data)
+        try:
+            response = requests.post(f"{self.server_url}/result/add", json=data)
 
-        if response.status_code != 200:
-            raise Exception(f"Failed to send result: {response.text}")
+            if response.status_code != 200:
+                raise SendResultError(f"Failed to send result: {response.text}")
 
-        return response.json()
+            return response.json()
+        except Exception as e:
+            raise SendResultError(f"Send Result Error: {str(e)}")
