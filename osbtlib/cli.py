@@ -1,4 +1,5 @@
 import requests
+from exceptions import SendResultError
 
 class CLIClient:
     def __init__(self, server_url="http://localhost:54454"):
