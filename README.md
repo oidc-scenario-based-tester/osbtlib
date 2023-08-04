@@ -108,7 +108,7 @@ $ mitmdump -s proxy-extension.py
 Then execute scenario script by `osbt run`.
 
 ```
-$ osbt run -f scenario.py -t 30
+$ osbt run -f scenario.py -t 30s
 ```
 
 ## Usage
