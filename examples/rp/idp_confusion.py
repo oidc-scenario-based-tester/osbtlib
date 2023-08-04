@@ -9,7 +9,7 @@ from osbtlib import BrowserSimulator, Osbtlib
 # Test Information
 test_name = "IdPConfusion"
 test_description = "IdPConfusion description"
-outcome = "Failed"
+outcome = "failed"
 err_msg = ""
 countermeasure = "IdPConfusion countermeasure"
 
@@ -51,7 +51,7 @@ print(page.content())
 
     # result check
     if "failed to exchange token" in content:
-        outcome = "Passed"
+        outcome = "pass"
 
     osbt.attacker_op.clean()
 
@@ -60,6 +60,6 @@ except Exception as e:
     print('Error:', e)
     osbt.attacker_op.clean()
 
-    outcome = "Failed"
+    outcome = "failed"
     err_msg = str(e)
     osbt.cli.send_result(test_name, test_description, outcome, err_msg, countermeasure)

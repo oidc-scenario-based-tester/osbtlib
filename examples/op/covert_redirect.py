@@ -9,7 +9,7 @@ from osbtlib import BrowserSimulator, Osbtlib
 # Test Information
 test_name = "CovertRedirect"
 test_description = "covert redirect description"
-outcome = "Failed"
+outcome = "failed"
 err_msg = ""
 countermeasure = "covert redirect countermeasure"
 
@@ -40,7 +40,7 @@ try:
 
     # result check
     if "The requested redirect_uri is missing" in content:
-        outcome = "Passed"
+        outcome = "pass"
 
     osbt.proxy.clean()
 
@@ -49,6 +49,6 @@ except Exception as e:
     print('Error:', e)
     osbt.proxy.clean()
 
-    outcome = "Failed"
+    outcome = "failed"
     err_msg = str(e)
     osbt.cli.send_result(test_name, test_description, outcome, err_msg, countermeasure)

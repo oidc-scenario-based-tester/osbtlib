@@ -9,7 +9,7 @@ from osbtlib import BrowserSimulator, Osbtlib
 # Test Information
 test_name = "CSRF"
 test_description = "csrf description"
-outcome = "Failed"
+outcome = "failed"
 err_msg = ""
 countermeasure = "csrf countermeasure"
 
@@ -73,7 +73,7 @@ print(page.content())
 
     # result check
     if "failed to get state" in content:
-        outcome = "Passed"
+        outcome = "pass"
     
     osbt.cli.send_result(test_name, test_description, outcome, err_msg, countermeasure)
 
@@ -81,6 +81,6 @@ except Exception as e:
     print('Error:', e)
     osbt.proxy.clean()
 
-    outcome = "Failed"
+    outcome = "failed"
     err_msg = str(e)
     osbt.cli.send_result(test_name, test_description, outcome, err_msg, countermeasure)

@@ -10,7 +10,7 @@ from osbtlib import BrowserSimulator, Osbtlib
 # Test Information
 test_name = "IDSpoofing"
 test_description = "- The attacker op modifies the id_token to impersonate the victim <br> - The sub claim of the id_token is modified to the victim's sub claim"
-outcome = "Failed"
+outcome = "failed"
 err_msg = ""
 countermeasure = "- Check the signature of the id_token <br> - Check the iss claim of the id_token <br> - Check the sub claim of the id_token"
 
@@ -54,7 +54,7 @@ print(page.content())
 
     # result check
     if "issuer does not match" in content:
-        outcome = "Passed"
+        outcome = "pass"
 
     osbt.attacker_op.clean()
 
@@ -63,6 +63,6 @@ except Exception as e:
     print('Error:', e)
     osbt.attacker_op.clean()
 
-    outcome = "Failed"
+    outcome = "failed"
     err_msg = str(e)
     osbt.cli.send_result(test_name, test_description, outcome, err_msg, countermeasure)
