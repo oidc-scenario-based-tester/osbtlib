@@ -7,6 +7,7 @@
 Scenario description library for [oidc-scenario-based-tester/osbt](https://github.com/oidc-scenario-based-tester/osbt)
 
 ## Install
+https://pypi.org/project/osbtlib/
 
 ```
 pip install osbtlib
