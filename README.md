@@ -1,4 +1,8 @@
 # osbtlib
+![GitHub](https://img.shields.io/github/license/oidc-scenario-based-tester/osbtlib)
+![osbt](https://img.shields.io/pypi/v/osbtlib)
+![osbt](https://img.shields.io/pypi/dm/osbtlib)
+
 Scenario description library for [oidc-scenario-based-tester/osbt](https://github.com/oidc-scenario-based-tester/osbt)
 
 ## Install
