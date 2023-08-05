@@ -1,4 +1,5 @@
 # osbtlib
+![Github](https://img.shields.io/github/actions/workflow/status/oidc-scenario-based-tester/osbtlib/actions.yml?branch=main)
 ![GitHub](https://img.shields.io/github/license/oidc-scenario-based-tester/osbtlib)
 ![osbt](https://img.shields.io/pypi/v/osbtlib)
 ![osbt](https://img.shields.io/pypi/dm/osbtlib)
