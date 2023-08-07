@@ -243,6 +243,38 @@ osbt.attacker_op.idp_confusion("http://localhost:9998/auth")
 - `honest_op_auth_endpoint`: `authorization_endpoint` of the honest OP. When an authentication request is sent to the Attacker OP, it is redirected to this endpoint with the query parameters passed on.
 
 ### Browser Simulator Operation `BrowserSimulator`
+#### Execute SSO Flow
+```py
+sso_flow = f"""
+page.locator('input[name="username"]').fill('{victim_username}')
+page.locator('input[name="password"]').fill('{victim_password}')
+page.locator('button[type="submit"]').click()
+print(page.content())
+"""
+bs.run(sso_flow)
+```
+> `bs.run(script: str)`
+- `script`: Script that shows browser behavior for executing SSO flow, written in PlayWright.
+
+#### Visit the specified URL
+```py
+bs.visit("https://example.com")
+```
+> `bs.visit(url: str)`
+- `url`: URL to visit in browser.
+
+#### Retrieving the content displayed in the browser
+```py
+bs.get_content() 
+```
+> `bs.get_content() -> str`
+
+#### Close the browser
+```py
+bs.close()
+```
+> `bs.close()`
+
 
 ### CLI Operation `Osbtlib.cli`
 
@@ -292,18 +324,3 @@ osbt.id_token.replace_header("[id_token]", "SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_a
 > `replace_header(id_token: str, new_signature: str) -> str`
 - `id_token`: ID token for which the signature will be replaced.
 - `new_signature`: Header of ID token after replacement.
-
-## Test
-```
-// Run all tests
-$ python -m pytest
-
-// Run only test that do not use the server and proxy
-$ python -m pytest -m "not server and not proxy"
-
-// Run only tests that do not use the server
-$ python -m pytest -m "not server"
-
-// Run only tests that use the server
-$ python -m pytest -m "server"
-```
