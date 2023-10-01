@@ -3,6 +3,7 @@ from .attacker_op import AttackerOPClient
 from .browser import BrowserSimulator
 from .cli import CLIClient
 from . import id_token
+from . import requestbin
 
 class Osbtlib:
     def __init__(
@@ -15,3 +16,4 @@ class Osbtlib:
         self.attacker_op = AttackerOPClient(attacker_op_url)
         self.cli = CLIClient(cli_server_url)
         self.id_token = id_token
+        self.requestbin = requestbin

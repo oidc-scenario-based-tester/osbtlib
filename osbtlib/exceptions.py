@@ -80,3 +80,13 @@ class SendResultError(CLIClientError):
     """
     Exception raised when there's an error in sending results in CLIClient.
     """
+
+# RequestBin
+class RequestBinError(Exception):
+    """
+    Base class for exceptions in RequestBin class 
+    """
+class GetHistoryError(RequestBinError):
+    """
+    Exception raised when there's an error in getting history in RequestBin.
+    """
