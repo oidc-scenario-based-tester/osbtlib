@@ -108,7 +108,7 @@ Run osbt server and proxy server extension.
 
 ```
 $ osbt server
-$ mitmdump -s proxy-extension.py
+$ mitmdump --ssl-insecure -s proxy-extension.py
 ```
 
 Then execute scenario script by `osbt run`.
