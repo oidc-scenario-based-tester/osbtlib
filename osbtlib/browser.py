@@ -7,13 +7,13 @@ class BrowserSimulator:
     def __init__(self, url: str, proxy_url: str):
         self.url = url
         self.proxy_url = proxy_url
-        self.browser = None
+
+        self.playwright = sync_playwright().start()
+        self.browser = self.playwright.chromium.launch(proxy={"server": self.proxy_url})
         self.page = None
 
     def run(self, script: str):
-        playwright = sync_playwright().start()
-        browser = playwright.chromium.launch(proxy={"server": self.proxy_url})
-        context = browser.new_context(ignore_https_errors=True)
+        context = self.browser.new_context(ignore_https_errors=True)
         page = context.new_page()
         page.goto(self.url)
 
@@ -23,9 +23,7 @@ class BrowserSimulator:
         except Exception as e:
             raise ExecutionError(f"Execution Error: {str(e)}")
 
-        # save browser and page
-        self.playwright = playwright
-        self.browser = browser
+        # save page
         self.page = page
 
     def visit(self, url: str):

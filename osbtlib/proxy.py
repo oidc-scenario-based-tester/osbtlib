@@ -15,77 +15,87 @@ class ProxyClient:
         except Exception as e:
             raise SendDataError(f"Send Data Error: {str(e)}")
 
-    def add_header(self, name: str, value: str, domain: str = None, path: str = None) -> dict:
+    def add_header(self, name: str, value: str, domain: str = None, path: str = None, method: str = None) -> dict:
         data = {
             "operation": "add_header",
             "name": name,
             "value": value,
             "domain": domain,
-            "path": path
+            "path": path,
+            "method": method
         }
         return self.send_data(data)
 
-    def modify_header(self, name: str, value: str, domain: str = None, path: str = None) -> dict:
+    def modify_header(self, name: str, value: str, domain: str = None, path: str = None, method: str = None) -> dict:
         data = {
             "operation": "modify_header",
             "name": name,
             "value": value,
             "domain": domain,
-            "path": path
+            "path": path,
+            "method": method
         }
         return self.send_data(data)
 
-    def add_query_param(self, name: str, value: str, domain: str = None, path: str = None) -> dict:
+    def add_query_param(self, name: str, value: str, domain: str = None, path: str = None, method: str = None) -> dict:
         data = {
             "operation": "add_query_param",
             "name": name,
             "value": value,
             "domain": domain,
-            "path": path
+            "path": path,
+            "method": method
         }
         return self.send_data(data)
 
-    def modify_query_param(self, name: str, value: str, domain: str = None, path: str = None) -> dict:
+    def modify_query_param(self, name: str, value: str, domain: str = None, path: str = None, method: str = None) -> dict:
         data = {
             "operation": "modify_query_param",
             "name": name,
             "value": value,
             "domain": domain,
-            "path": path
+            "path": path,
+            "method": method
         }
         return self.send_data(data)
 
-    def add_body_param(self, name: str, value: str, domain: str = None, path: str = None) -> dict:
+    def add_body_param(self, name: str, value: str, domain: str = None, path: str = None, method: str = None) -> dict:
         data = {
             "operation": "add_body_param",
             "name": name,
             "value": value,
             "domain": domain,
-            "path": path
+            "path": path,
+            "method": method
         }
         return self.send_data(data)
 
-    def modify_body_param(self, name: str, value: str, domain: str = None, path: str = None) -> dict:
+    def modify_body_param(self, name: str, value: str, domain: str = None, path: str = None, method: str = None) -> dict:
         data = {
             "operation": "modify_body_param",
             "name": name,
             "value": value,
             "domain": domain,
-            "path": path
+            "path": path,
+            "method": method
         }
         return self.send_data(data)
 
-    def intercept_request(self, condition: str) -> dict:
+    def intercept_request(self, domain: str = None, path: str = None, method: str = None) -> dict:
         data = {
             "operation": "intercept_request",
-            "condition": condition
+            "domain": domain,
+            "path": path,
+            "method": method
         }
         return self.send_data(data)
     
-    def intercept_response(self, condition: str) -> dict:
+    def intercept_response(self, domain: str = None, path: str = None, method: str = None) -> dict:
         data = {
             "operation": "intercept_response",
-            "condition": condition
+            "domain": domain,
+            "path": path,
+            "method": method
         }
         return self.send_data(data)
     
