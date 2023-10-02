@@ -1,5 +1,6 @@
 import sys
 import re
+import time
 from playwright.sync_api import sync_playwright
 from .exceptions import ExecutionError, NoPageAvailableError, NoContentAvailableError
 
@@ -9,7 +10,9 @@ class BrowserSimulator:
         self.proxy_url = proxy_url
 
         self.playwright = sync_playwright().start()
-        self.browser = self.playwright.chromium.launch(proxy={"server": self.proxy_url})
+        self.browser = self.playwright.chromium.launch(
+            proxy={"server": self.proxy_url}
+        )
         self.page = None
 
     def run(self, script: str):
@@ -23,6 +26,9 @@ class BrowserSimulator:
         except Exception as e:
             raise ExecutionError(f"Execution Error: {str(e)}")
 
+        # Wait for page to load
+        page.wait_for_load_state("load")
+        
         # save page
         self.page = page
 
