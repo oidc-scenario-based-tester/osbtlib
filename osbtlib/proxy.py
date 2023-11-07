@@ -20,7 +20,7 @@ class ProxyClient:
             "operation": "add_header",
             "name": name,
             "value": value,
-            "domain": domain,
+            "host": host,
             "path": path,
             "method": method
         }
@@ -31,7 +31,7 @@ class ProxyClient:
             "operation": "modify_header",
             "name": name,
             "value": value,
-            "domain": domain,
+            "host": host,
             "path": path,
             "method": method
         }
@@ -42,7 +42,7 @@ class ProxyClient:
             "operation": "add_query_param",
             "name": name,
             "value": value,
-            "domain": domain,
+            "host": host,
             "path": path,
             "method": method
         }
@@ -53,7 +53,7 @@ class ProxyClient:
             "operation": "modify_query_param",
             "name": name,
             "value": value,
-            "domain": domain,
+            "host": host,
             "path": path,
             "method": method
         }
@@ -64,7 +64,7 @@ class ProxyClient:
             "operation": "add_body_param",
             "name": name,
             "value": value,
-            "domain": domain,
+            "host": host,
             "path": path,
             "method": method
         }
@@ -75,7 +75,7 @@ class ProxyClient:
             "operation": "modify_body_param",
             "name": name,
             "value": value,
-            "domain": domain,
+            "host": host,
             "path": path,
             "method": method
         }
@@ -84,7 +84,7 @@ class ProxyClient:
     def intercept_request(self, host: str = None, path: str = None, method: str = None) -> dict:
         data = {
             "operation": "intercept_request",
-            "domain": domain,
+            "host": host,
             "path": path,
             "method": method
         }
@@ -93,7 +93,7 @@ class ProxyClient:
     def intercept_response(self, host: str = None, path: str = None, method: str = None) -> dict:
         data = {
             "operation": "intercept_response",
-            "domain": domain,
+            "host": host,
             "path": path,
             "method": method
         }
