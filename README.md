@@ -153,54 +153,94 @@ Create an instance of `BrowserSimulator`. The arguments are as follows:
 ### Proxy Server Operation `Osbtlib.proxy`
 #### add, modify request header
 ```py
-osbt.proxy.add_header("header_name", "header_value")
-osbt.proxy.modify_header("modified_header_name", "header_value")
+osbt.proxy.add_header("header_name", "header_value", "host", "path", "method")
+osbt.proxy.modify_header("modified_header_name", "header_value", "host", "path", "method")
 ```
 
-> `add_header(name: str, value: str) -> dict`
+> `add_header(name: str, value: str, host: str = None, path: str = None, method: str = None) -> dict`
 - `name`: Name of the header to be added
 - `value`: Value of the header to be added
+- `domain`: Condition1, host name of the request
+- `path`: Condition2, path of the request
+- `method`: Condition3, method of the request
 
-> `modify_header(name: str, value: str) -> dict`
+If you specify conditions, the header will be added if the conditions are met.
+
+> `modify_header(name: str, value: str, host: str = None, path: str = None, method: str = None) -> dict`
 - `name`: Name of the header to be replaced
 - `value`: Value of the header to be replaced
+- `domain`: Condition1, host name of the request
+- `path`: Condition2, path of the request
+- `method`: Condition3, method of the request
+
+If you specify conditions, the header will be modified if the conditions are met.
 
 #### add, modify request query param
 ```py
-osbt.proxy.add_query_param("param_name", "param_value")
-osbt.proxy.modify_query_param("modified_param_name", "param_value")
+osbt.proxy.add_query_param("param_name", "param_value", "host", "path", "method")
+osbt.proxy.modify_query_param("modified_param_name", "param_value", "host", "path", "method")
 ```
-> `add_query_param(name: str, value: str) -> dict`
+> `add_query_param(name: str, value: str, host: str = None, path: str = None, method: str = None) -> dict`
 - `name`: Name of the query param to be added
 - `value`: Value of the query param to be added
+- `domain`: Condition1, host name of the request
+- `path`: Condition2, path of the request
+- `method`: Condition3, method of the request
 
-> `modify_query_param(name: str, value: str) -> dict`
+If you specify conditions, the query param will be added if the conditions are met.
+
+> `modify_query_param(name: str, value: str, host: str = None, path: str = None, method: str = None) -> dict`
 - `name`: Name of the query param to be replaced
 - `value`: Value of the query param to be replaced
+- `domain`: Condition1, host name of the request
+- `path`: Condition2, path of the request
+- `method`: Condition3, method of the request
+
+If you specify conditions, the query param will be modified if the conditions are met.
 
 #### add, modify request body param
 ```py
-osbt.proxy.add_body_param("param_name", "param_value")
-osbt.proxy.modify_body_param("modified_param_name", "param_value")
+osbt.proxy.add_body_param("param_name", "param_value", "host", "path", "method")
+osbt.proxy.modify_body_param("modified_param_name", "param_value", "host", "path", "method")
 ```
-> `add_body_param(name: str, value: str) -> dict`
+> `add_body_param(name: str, value: str, host: str = None, path: str = None, method: str = None) -> dict`
 - `name`: Name of the body param to be added
 - `value`: Value of the body param to be added
+- `domain`: Condition1, host name of the request
+- `path`: Condition2, path of the request
+- `method`: Condition3, method of the request
 
-> `modify_body_param(name: str, value: str) -> dict`
+If you specify conditions, the body param will be added if the conditions are met.
+
+> `modify_body_param(name: str, value: str, host: str = None, path: str = None, method: str = None) -> dict`
 - `name`: Name of the body param to be replaced
 - `value`: Value of the body param to be replaced
+- `domain`: Condition1, host name of the request
+- `path`: Condition2, path of the request
+- `method`: Condition3, method of the request
+
+If you specify conditions, the body param will be modified if the conditions are met.
 
 #### intercept request/response
 ```py
 osbt.proxy.intercept_request("condition")
 osbt.proxy.intercept_response("condition")
 ```
-> `intercept_request(condition: str) -> dict`
+> `intercept_request(host: str = None, path: str = None, method: str = None) -> dict`
 - `condition`: Requests containing this string are dropped
+- `domain`: Condition1, host name of the request
+- `path`: Condition2, path of the request
+- `method`: Condition3, method of the request
 
-> `intercept_response(condition: str) -> dict`
+If you specify conditions, the request will be intercepted if the conditions are met.
+
+> `intercept_response(host: str = None, path: str = None, method: str = None) -> dict`
 - `condition`: Responses containing this string are dropped
+- `domain`: Condition1, host name of the request
+- `path`: Condition2, path of the request
+- `method`: Condition3, method of the request
+
+If you specify conditions, the response will be intercepted if the conditions are met.
 
 #### get request/response history
 ```py
@@ -242,6 +282,17 @@ osbt.attacker_op.idp_confusion("http://localhost:9998/auth")
 > `idp_confusion(honest_op_auth_endpoint: str) -> bool`
 - `honest_op_auth_endpoint`: `authorization_endpoint` of the honest OP. When an authentication request is sent to the Attacker OP, it is redirected to this endpoint with the query parameters passed on.
 
+### Attacker Server Operation `Osbtlib.requestbin`
+#### Get Requestbin history
+```py
+osbt.requestbin.get_requestbin_history("PIPEDREAM_TOKEN", "PIPEDREAM_SOURCE_ID")
+```
+> `get_requestbin_history(pipedream_token: str, source_id: str)`
+- `pipedream_token`: Pipedream API token
+- `source_id`: Pipedream source ID
+
+You can use requestbin of [pipedream](https://pipedream.com/) as attacker server.
+
 ### Browser Simulator Operation `BrowserSimulator`
 #### Execute SSO Flow
 ```py
@@ -274,7 +325,6 @@ bs.get_content()
 bs.close()
 ```
 > `bs.close()`
-
 
 ### CLI Operation `Osbtlib.cli`
 
